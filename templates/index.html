@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="mb-4">Лента записей</h1>
+{% if not posts %}
+  <p class="text-muted">Записей пока нет. Будьте первым!</p>
+{% endif %}
+<div class="row g-3">
+  {% for p in posts %}
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100 shadow-sm">
+        {% if p.image %}
+          <img src="{{ url_for('uploaded', name=p.image) }}"
+               class="card-img-top" alt="{{ p.title }}"
+               style="height:220px;object-fit:cover">
+        {% endif %}
+        <div class="card-body">
+          <h5 class="card-title">{{ p.title }}</h5>
+          <p class="card-text text-muted small">
+            {{ p.author.name }} &middot;
+            {{ p.created.strftime('%d.%m.%Y %H:%M') }}
+          </p>
+          <p class="card-text">{{ p.text[:120] }}{% if p.text|length > 120 %}…{% endif %}</p>
+          <a href="{{ url_for('view_post', pid=p.id) }}"
+             class="btn btn-sm btn-outline-primary">Открыть</a>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}
